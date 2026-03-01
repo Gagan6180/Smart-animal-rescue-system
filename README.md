@@ -93,7 +93,7 @@ Submit PR to main repository
 * AI-based animal injury detection from image
 * Heatmap of rescue hotspots
 * ntegration with local NGOs
-* Mobile App versio
+* Mobile App version
 
 
 <b>👤Author</b>
