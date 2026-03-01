@@ -114,5 +114,7 @@ Integration with local NGOs
 
 Mobile App version
 
-<b>Author</b>
+
+<b>👤Author</b>
+<br>
 Tusshar Singh
