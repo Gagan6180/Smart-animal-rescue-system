@@ -1,0 +1,343 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#loader {
+  position: fixed;
+  inset: 0;             
+  width: 100vw;
+  height: 100vh;
+  background: #1f2a38;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.paw-container {
+  position: relative;
+  width: 300px;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.paw {
+  position: absolute;
+  font-size: 28px;
+  opacity: 0;
+  animation: walk 2s linear infinite;
+}
+
+/* Staggered timing */
+.paw1 { animation-delay: 0s; left: 0px; top: 40px; }
+.paw2 { animation-delay: 0.4s; left: 60px; top: 20px; }
+.paw3 { animation-delay: 0.8s; left: 120px; top: 40px; }
+.paw4 { animation-delay: 1.2s; left: 180px; top: 20px; }
+.paw5 { animation-delay: 1.6s; left: 240px; top: 40px; }
+
+@keyframes walk {
+  0% { opacity: 0; transform: scale(0.5); }
+  20% { opacity: 1; transform: scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+#loader h2 {
+  font-weight: normal;
+  letter-spacing: 1px;
+}
+
+.login-box {
+  background: white;
+  padding: 30px;
+  width: 320px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+.login-box input,
+.login-box select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 10px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.login-box button:hover {
+  background: #c0392b;
+}
+
+/* Background */
+.login-page {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1f2a38, #2c3e50);
+  font-family: Arial, sans-serif;
+}
+
+/* Card */
+.login-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  padding: 40px;
+  width: 350px;
+  border-radius: 20px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+/* Role buttons */
+.role-selector {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.role-btn {
+  flex: 1;
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  transition: 0.3s;
+}
+
+.role-btn:hover {
+  background: #e74c3c;
+}
+
+.role-btn.active {
+  background: #e74c3c;
+}
+
+/* Inputs */
+.login-card input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+/* Login button */
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #e74c3c;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: #c0392b;
+}
+
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f9f7f7, #dbe2ef);
+}
+
+.login-card {
+  background: white;
+  padding: 40px;
+  width: 350px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 20px;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #3f72af;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-card button:hover {
+  background: #2c5d8f;
+}
+
+.extra {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+/* ================= LOGIN ROLE SYSTEM ================= */
+
+.role-selector {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.role-btn {
+  flex: 1;
+  margin: 5px;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: #ddd;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.role-btn:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.role-btn.active {
+  background-color: #e74c3c;
+  color: white;
+}
+
+#loginForm input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  transition: 0.3s;
+}
+
+#loginForm input:focus {
+  border-color: #e74c3c;
+  outline: none;
+  box-shadow: 0 0 5px rgba(231, 76, 60, 0.4);
+}
+
+#loginForm button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: none;
+  background-color: #e74c3c;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#loginForm button:hover {
+  background-color: #c0392b;
+}
+
+/* Smooth Animation for Extra Fields */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#extraFields input {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Centered Login Layout */
+
+.login-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f4f4;
+}
+
+.login-card {
+  width: 400px;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+/*background image*/
+.login-wrapper {
+  background: url("https://www.pixelstalk.net/wp-content/uploads/wallpapers/dog-and-cat-cocker-spaniel-puppy-small-ginger-kitten-kiss.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+.login-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+/* ===== BRAND TITLE ===== */
+
+.brand-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 5px;
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.tagline {
+  text-align: center;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 20px;
+}

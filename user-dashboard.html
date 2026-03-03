@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Dashboard - FurEver Safe</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <div class="dashboard-container">
+
+    <h1>FurEver Safe 🐾</h1>
+    <h2>Welcome, User</h2>
+
+    <div class="report-section">
+      <h3>Report an Animal</h3>
+
+      <form id="reportForm">
+        <input type="text" id="location" placeholder="Location" required>
+        <textarea id="description" placeholder="Describe the situation" required></textarea>
+        <button type="submit">Submit Report</button>
+      </form>
+    </div>
+
+    <div class="reports-section">
+      <h3>Your Reports</h3>
+      <ul id="reportList"></ul>
+    </div>
+
+    <button id="logoutBtn" class="logout-btn">Logout</button>
+
+  </div>
+
+  <script src="js/user-dashboard.js"></script>
+</body>
+</html>
