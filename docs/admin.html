@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+
+<body>
+
+    <nav class="top-nav">
+        <div class="logo">FurEver Safe 🐾</div>
+        <ul class="nav-links">
+            <li class="active"><a href="admin-dashboard.html">Dashboard</a></li>
+            <li><a href="admin-cases.html">All Cases</a></li>
+            <li><a href="admin-volunteers.html">Volunteers</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="profile-container">
+        <h2>Admin Dashboard</h2>
+
+        <!-- ADMIN INFO -->
+        <div id="profileDisplay" class="profile-display">
+            <img id="displayImage" src="default.png" alt="Profile Picture">
+            <p><strong>Name:</strong> <span id="displayName"></span></p>
+            <p><strong>Email:</strong> <span id="displayEmail"></span></p>
+
+            <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-container">
+            <div class="stat-box">
+                <h3>Total Cases</h3>
+                <p id="statTotal">0</p>
+            </div>
+            <div class="stat-box">
+                <h3>Open</h3>
+                <p id="statOpen">0</p>
+            </div>
+            <div class="stat-box">
+                <h3>Active</h3>
+                <p id="statActive">0</p>
+            </div>
+            <div class="stat-box">
+                <h3>Rescued</h3>
+                <p id="statRescued">0</p>
+            </div>
+            <div class="stat-box">
+                <h3>Volunteers</h3>
+                <p id="statVolunteers">0</p>
+            </div>
+        </div>
+
+        <!-- ALL CASES -->
+        <div class="cases-section">
+            <h3>All Cases</h3>
+
+            <div class="filter-tabs">
+                <button class="filterBtn active" data-filter="all">All</button>
+                <button class="filterBtn" data-filter="open">Open</button>
+                <button class="filterBtn" data-filter="in-progress">In Progress</button>
+                <button class="filterBtn" data-filter="rescued">Rescued</button>
+            </div>
+
+            <div id="caseList"></div>
+        </div>
+
+        <!-- VOLUNTEERS LIST -->
+        <div class="cases-section">
+            <h3>Volunteers</h3>
+            <div id="volunteerList"></div>
+        </div>
+
+        <!-- MAP -->
+        <div class="map-section">
+            <h3>All Case Locations</h3>
+            <div id="map" style="height: 350px;"></div>
+        </div>
+    </div>
+
+    <!-- Assign Volunteer Modal -->
+    <div class="logout-modal" id="assignModal">
+        <div class="logout-box">
+            <h3 id="modalCaseId">Assign Volunteer</h3>
+
+            <label>Select Volunteer</label>
+            <select id="volunteerSelect"></select>
+
+            <label>Status</label>
+            <select id="statusSelect">
+                <option value="open">Open</option>
+                <option value="in-progress">In Progress</option>
+                <option value="rescued">Rescued</option>
+            </select>
+
+            <label>Notes</label>
+            <textarea id="caseNotes" placeholder="Add any notes..."></textarea>
+
+            <div class="logout-actions">
+                <button id="cancelAssign">Cancel</button>
+                <button id="saveAssign">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="logout-modal" id="logoutModal">
+        <div class="logout-box">
+            <h3>Are you sure you want to logout?</h3>
+            <div class="logout-actions">
+                <button id="cancelLogout">No</button>
+                <button id="confirmLogout">Yes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</body>
+
+</html>
