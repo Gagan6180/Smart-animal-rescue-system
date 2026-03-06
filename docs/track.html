@@ -1,35 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track</title>
-        <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Track – FurEver Safe 🐾</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/track.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
 </head>
 <body>
-    <nav class="top-nav">
+
+<nav class="top-nav">
   <div class="logo">FurEver Safe 🐾</div>
   <ul class="nav-links">
-    <li class="active"><a href="home.html">Home</a></li>
+    <li><a href="home.html">Home</a></li>
     <li><a href="report.html">Report</a></li>
-    <li><a href="track.html">Track</a></li>
+    <li class="active"><a href="track.html">Track</a></li>
     <li><a href="profile.html">Profile</a></li>
-    <!-- <li><a href="#">Logout</a></li> -->
   </ul>
 </nav>
 
-    <div class="track-container">
-  <h2>Track Your Request</h2>
-  <div id="trackStatus"></div>
+<!-- STATUS BANNER — filled by JS -->
+<div class="status-banner" id="statusBanner"></div>
+
+<!-- NO REPORT STATE -->
+<div id="noReportState" class="state-box" style="display:none;">
+  <div class="state-icon">📭</div>
+  <h2>No reports submitted yet</h2>
+  <p>Submit a report first and then come back to track its status.</p>
+  <a href="report.html" class="state-btn">Go to Report Page</a>
 </div>
 
-<div id="chatBox" style="display:none;">
-  <div id="messages"></div>
-  <input type="text" id="chatInput">
-  <button onclick="sendMessage()">Send</button>
+<!-- PENDING STATE (Submitted, waiting for volunteer) -->
+<div id="pendingState" class="state-box" style="display:none;">
+  <div class="state-icon pending-spin">🔄</div>
+  <h2>Waiting for a Volunteer...</h2>
+  <p>Your report has been submitted. A volunteer will accept it shortly.</p>
+  <div class="report-preview" id="pendingPreview"></div>
 </div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="js/track.js"></script>
+
+<!-- REJECTED STATE -->
+<div id="rejectedState" class="state-box" style="display:none;">
+  <div class="state-icon">❌</div>
+  <h2>Report Rejected</h2>
+  <p>Unfortunately your request was rejected. Please re-submit with more details.</p>
+  <a href="report.html" class="state-btn">Re-submit Report</a>
+</div>
+
+<!-- ACCEPTED STATE — full UI -->
+<div id="acceptedState" style="display:none;">
+  <div class="track-wrapper">
+
+    <!-- VOLUNTEER INFO -->
+    <div class="card">
+      <h3>Volunteer Details</h3>
+      <div class="volunteer-profile">
+        <div class="avatar">👨</div>
+        <div>
+          <div class="volunteer-name">Tusshar Singh</div>
+          <div class="volunteer-rating">★★★★★ &nbsp;4.9 · 127 rescues</div>
+        </div>
+      </div>
+      <!-- Report summary pulled from localStorage -->
+      <table class="summary-table">
+        <tr><td>Animal</td><td id="summaryAnimal">—</td></tr>
+        <tr><td>Location</td><td id="summaryLocation">—</td></tr>
+        <tr><td>Urgency</td><td id="summaryUrgency">—</td></tr>
+        <tr><td>Status</td><td class="status-accepted">✅ Accepted</td></tr>
+      </table>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <div class="meta-label">Phone</div>
+          <div class="meta-value">+91 6909987944</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Distance</div>
+          <div class="meta-value green">2.8 km away</div>
+        </div>
+      </div>
+      <div class="eta-box">
+        <div>
+          <div class="eta-label">Estimated Arrival</div>
+          <div class="eta-note">Updates in real-time</div>
+        </div>
+        <div>
+          <div class="eta-time" id="etaTimer">08:42</div>
+          <div class="eta-unit">min</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAP -->
+    <div class="card">
+      <h3>Live Location</h3>
+      <div id="map"></div>
+      <div class="map-footer">
+        <div class="live-badge"><div class="pulse-dot" style="background:#20C997"></div> LIVE</div>
+        <span class="map-note">Volunteer location updates every 5 seconds</span>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="card card-full">
+      <h3>Chat with Tusshar Singh</h3>
+      <div class="chat-window" id="chatWindow">
+        <div class="msg received">
+          <div class="msg-sender">Tusshar Singh</div>
+          <div class="msg-bubble">Hello! I've accepted your rescue request. I'm on my way. 🐾</div>
+          <div class="msg-time">Just now</div>
+        </div>
+        <div class="msg received">
+          <div class="msg-sender">Tusshar Singh</div>
+          <div class="msg-bubble">Can you describe where exactly the animal is? Near a shop or landmark?</div>
+          <div class="msg-time">Just now</div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/track.js"></script>
 </body>
 </html>

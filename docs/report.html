@@ -34,13 +34,13 @@
   <input type="text" id="location" name="location" placeholder="Enter address or use button" required>
   <button type="button" id="getLocation">Use My Location</button>
 
- <label for="photo" style="font-weight:600; color:#333;">Photo:</label>
+ <!-- <label for="photo" style="font-weight:600; color:#333;">Photo:</label> -->
 
 <!-- Camera button -->
-<button type="button" id="takePhoto">📷 Take Photo</button>
+<!-- <button type="button" id="takePhoto">📷 Take Photo</button> -->
 
 <!-- Default choose file -->
-<input type="file" id="photo" name="photo" accept="image/*" capture="environment" style="margin-top:10px;" required>
+<!-- <input type="file" id="photo" name="photo" accept="image/*" capture="environment" style="margin-top:10px;" required> -->
 
   <label for="description">Description:</label>
   <textarea id="description" name="description" rows="4" placeholder="Brief description" required></textarea>
@@ -55,7 +55,13 @@
 
 
   <div class="report-actions">
-    <button type="submit" id="submitReport">Submit Report</button>
+    <!-- <button type="submit" id="submitReport">Submit Report</button> -->
+     <input type="file" id="animalImage" accept="image/*">
+<img id="preview" width="200">
+
+<button id="submitReport">Submit Report</button>
+
+<p id="aiResult"></p>
     <button type="button" id="clearReports">🗑️ Clear Reports</button>
   </div>
 </form>
@@ -81,7 +87,9 @@
 </div>
 </div>
 
- <script src="js/user-dashboard.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+ <script src="js/report.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>

@@ -232,3 +232,262 @@ function loadPage(page) {
       }
     });
 }
+
+
+// Report form JS
+  const reportForm = document.getElementById('reportForm');
+  if (reportForm) {
+    const reportList = document.getElementById('reportList');
+    const locationInput = document.getElementById('location');
+    const getLocationBtn = document.getElementById('getLocation');
+    const photoInput = document.getElementById('photo');
+    const takePhotoBtn = document.getElementById('takePhoto');
+
+    // Get user location
+    getLocationBtn?.addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            locationInput.value = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
+          },
+          () => alert("Could not get your location. Please enter manually.")
+        );
+      }
+    });
+
+    // Trigger file input on camera button
+    takePhotoBtn?.addEventListener('click', () => photoInput?.click());
+
+    // Load saved reports
+    const storedReports = JSON.parse(localStorage.getItem('reports')) || [];
+    storedReports.forEach(addReportRow);
+
+    // Submit new report
+    reportForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const report = {
+        animal: document.getElementById('animalType').value,
+        location: locationInput.value,
+        description: document.getElementById('description').value,
+        urgency: document.getElementById('urgency').value,
+        status: "Pending",
+        photoURL: photoInput.files[0] ? URL.createObjectURL(photoInput.files[0]) : ""
+      };
+
+      // Save to localStorage
+      const reports = JSON.parse(localStorage.getItem('reports')) || [];
+      reports.push(report);
+      localStorage.setItem('reports', JSON.stringify(reports));
+
+      // Add to table
+      addReportRow(report);
+
+      // Reset form
+      reportForm.reset();
+    });
+
+    // Helper function to add a row
+    function addReportRow(report) {
+      const row = document.createElement('tr');
+      if (report.urgency === "high") row.style.backgroundColor = "#ffcccc";
+      row.innerHTML = `
+        <td>${report.animal}</td>
+        <td>${report.location}</td>
+        <td>${report.description}</td>
+        <td>${report.urgency}</td>
+        <td>${report.status}</td>
+        <td>${report.photoURL ? `<img src="${report.photoURL}" width="80" style="border-radius:6px;">` : "No Photo"}</td>
+      `;
+      reportList.appendChild(row);
+    }
+  }
+
+  // ==========================
+  // SOS Button: Open report.html directly
+  // ==========================
+  const sosBtn = document.getElementById('sosBtn');
+  sosBtn?.addEventListener('click', () => {
+    window.location.href = "report.html";
+  });
+
+  // ==========================
+  // Navbar links open separate HTML pages
+  // ==========================
+  document.querySelectorAll('.nav-links li a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      // Optionally, prevent default for some logic
+      // e.preventDefault();
+      // window.location.href = link.href; // already works as default
+    });
+  });
+});
+
+const clearBtn = document.getElementById('clearReports');
+
+clearBtn?.addEventListener('click', () => {
+  if (confirm("Are you sure you want to delete all reports?")) {
+    localStorage.removeItem('reports'); // clears all saved reports
+
+    // Clear table content
+    const reportList = document.getElementById('reportList');
+    reportList.innerHTML = '';
+
+    alert("All reports have been cleared!");
+  }
+});const imageInput = document.getElementById("animalImage");
+const preview = document.getElementById("preview");
+const result = document.getElementById("aiResult");
+const submitBtn = document.getElementById("submitReport");
+
+let model;
+
+// load AI model
+mobilenet.load().then(m => {
+    model = m;
+    console.log("AI Model Loaded");
+});
+
+// show preview
+imageInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+    preview.src = URL.createObjectURL(file);
+
+});
+
+// run detection
+submitBtn.addEventListener("click", async function () {
+
+//     const predictions = await model.classify(preview);
+
+//     console.log(predictions);
+
+//     const label = predictions[0].className.toLowerCase();
+
+//     if(
+//         label.includes("dog") ||
+//         label.includes("cat") ||
+//         label.includes("cow") ||
+//         label.includes("horse") ||
+//         label.includes("sheep") ||
+//         label.includes("animal")
+//     ){
+
+//         result.innerHTML = "✅ Animal detected: " + label;
+
+//         // allow report submission
+//         submitReport();
+
+//     }else{
+
+//         result.innerHTML = "❌ No animal detected. Please upload a real animal photo.";
+
+//     }
+
+
+const predictions = await model.classify(preview);
+
+console.log(predictions);
+
+const label = predictions[0].className.toLowerCase();
+
+if (
+  label.includes("dog") ||
+  label.includes("retriever") ||
+  label.includes("shepherd") ||
+  label.includes("cat") ||
+  label.includes("horse") ||
+  label.includes("cow") ||
+  label.includes("sheep") ||
+  label.includes("animal")
+) {
+
+  result.innerHTML = "✅ Animal detected: " + label;
+
+  submitReport();
+
+} else {
+
+  result.innerHTML = "❌ No animal detected. Please upload a real animal photo.";
+
+}
+});
+result.innerHTML = `✅ ${predictions[0].className} detected (${Math.round(predictions[0].probability*100)}%)`
+
+function submitReport(){
+
+  const report = {
+    id: Date.now(),
+    animal: document.getElementById("animalType").value,
+    severity: document.getElementById("severity").value,
+    location: document.getElementById("location").value,
+    status: "Pending"
+  };
+
+  let reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+  reports.push(report);
+
+  localStorage.setItem("reports", JSON.stringify(reports));
+
+}
+function loadReports(){
+
+  const reports = JSON.parse(localStorage.getItem("reports")) || [];
+  const container = document.getElementById("reportList");
+
+  container.innerHTML = "";
+
+  reports.forEach(report => {
+
+    container.innerHTML += `
+      <div class="report-card">
+        <p><b>Animal:</b> ${report.animal}</p>
+        <p><b>Location:</b> ${report.location}</p>
+        <p><b>Status:</b> ${report.status}</p>
+
+        <button onclick="editReport(${report.id})">Edit</button>
+      </div>
+    `;
+
+  });
+  loadReports();
+
+  function editReport(id){
+
+  let reports = JSON.parse(localStorage.getItem("reports"));
+
+  const report = reports.find(r => r.id === id);
+
+  const newLocation = prompt("Update location:", report.location);
+
+  if(newLocation){
+
+    report.location = newLocation;
+
+    localStorage.setItem("reports", JSON.stringify(reports));
+
+    loadReports();
+  }
+
+}
+}
+function submitReport(){
+
+fetch("http://localhost:5000/report",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+animal:"dog",
+location:"xyz",
+description:"injured dog"
+})
+})
+.then(res=>res.json())
+.then(data=>{
+alert("Report submitted!");
+})
+}
+
