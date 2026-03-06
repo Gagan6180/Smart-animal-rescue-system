@@ -170,3 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+
+
+if(localStorage.getItem("role") !== "volunteer"){
+  window.location.href = "login.html";
+}

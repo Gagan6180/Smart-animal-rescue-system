@@ -20,28 +20,44 @@ document.addEventListener("DOMContentLoaded", function () {
   function showFields(role) {
     extraFields.innerHTML = "";
 
-    if(role === "volunteer"){
+    if (role === "volunteer") {
       extraFields.innerHTML = `
-        <input type="email" placeholder="Email" required>
-        <input type="password" placeholder="Password" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
       `;
     }
 
-    if(role === "admin"){
+    if (role === "admin") {
       extraFields.innerHTML = `
-        <input type="email" placeholder="Admin Email" required>
-        <input type="password" placeholder="Password" required>
-        <input type="text" placeholder="Admin Secret Code" required>
+        <input type="email" id="email" placeholder="Admin Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="text" id="secret" placeholder="Admin Secret Code" required>
       `;
     }
   }
 
-  // 🔥 LOGIN FIX
   loginForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
     localStorage.setItem("loggedIn", "true");
-    window.location.href = "home.html";
+    localStorage.setItem("role", selectedRole);
+
+    if (selectedRole === "user") {
+      window.location.href = "home.html";
+    }
+
+    if (selectedRole === "volunteer") {
+      window.location.href = "volunteer.html";
+    }
+
+    if (selectedRole === "admin") {
+      window.location.href = "admin.html";
+    }
   });
 
 });
+
+// Backend test
+fetch("http://localhost:5000/")
+.then(res => res.text())
+.then(data => console.log(data));
