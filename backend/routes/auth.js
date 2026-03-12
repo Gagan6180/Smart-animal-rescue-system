@@ -43,4 +43,14 @@ router.post("/login", async (req, res) => {
     }
 });
 
+// GET all volunteers (admin only)
+router.get("/volunteers", async (req, res) => {
+    try {
+        const volunteers = await User.find({ role: "volunteer" }).select("-password");
+        res.json(volunteers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;
