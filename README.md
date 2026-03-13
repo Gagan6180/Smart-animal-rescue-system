@@ -86,9 +86,9 @@ Submit PR to main repository
 
 1. Tusshar Singh [@Tusshar-web](https://github.com/Tusshar-web/)
 2. Mahi Sharma
-3. Gagan Upadhyaya
+3. Gagan Upadhyaya [Gagan](https://github.com/Gagan6180)
 4. Bornil Gogoi [@born1l](https://github.com/born1l/)
-5. Snehasish Das
+5. Snehasish Das [@snehas1sh](https://github.com/snehas1sh)
 
 ## 🌍 Future Scope
 
@@ -97,7 +97,3 @@ Submit PR to main repository
 * ntegration with local NGOs
 * Mobile App version
 
-
-<b>👤Author</b>
-<br>
-Tusshar Singh
