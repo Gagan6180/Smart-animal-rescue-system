@@ -1,70 +1,290 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-        <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — FurEver Safe</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <style>
+    body {
+      background: #f0f4f8;
+    }
+
+    .profile-page {
+      max-width: 480px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-banner {
+      height: 90px;
+      background: linear-gradient(135deg, #a8edea, #fed6e3, #f9ca8a);
+    }
+
+    .profile-avatar-wrap {
+      padding: 0 25px;
+      margin-top: -38px;
+      margin-bottom: 10px;
+    }
+
+    .profile-avatar-wrap img {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      border: 3px solid white;
+      object-fit: cover;
+      background: #e0e0e0;
+    }
+
+    .profile-body {
+      padding: 0 25px 25px;
+    }
+
+    .profile-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 0 0 6px;
+    }
+
+    .profile-badges {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-role {
+      background: #e8f4fd;
+      color: #2d86c9;
+    }
+
+    .badge-reports {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .profile-info {
+      margin-bottom: 20px;
+    }
+
+    .profile-info-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    .profile-info-row:last-child {
+      border-bottom: none;
+    }
+
+    .profile-info-row .icon {
+      font-size: 1rem;
+      width: 22px;
+      text-align: center;
+    }
+
+    .profile-info-row .label {
+      color: #999;
+      font-size: 0.8rem;
+      min-width: 55px;
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: #1a1a1a;
+      color: white;
+      border: none;
+      padding: 11px 0;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #333;
+    }
+
+    .btn-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid #ddd;
+      background: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .btn-icon:hover {
+      background: #f5f5f5;
+    }
+
+    /* EDIT FORM */
+    .edit-form {
+      padding: 20px 25px 25px;
+      display: none;
+    }
+
+    .edit-form h3 {
+      margin: 0 0 16px;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .edit-form label {
+      font-size: 0.82rem;
+      color: #888;
+      display: block;
+      margin-bottom: 4px;
+      margin-top: 12px;
+    }
+
+    .edit-form input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    .edit-form input:focus {
+      border-color: #2d6a4f;
+      outline: none;
+    }
+
+    .edit-form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .btn-save {
+      flex: 1;
+      background: #2d6a4f;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      background: #f0f0f0;
+      color: #333;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
-     <nav class="top-nav">
-  <div class="logo">FurEver Safe 🐾</div>
-  <ul class="nav-links">
-    <li class="active"><a href="home.html">Home</a></li>
-    <li><a href="report.html">Report</a></li>
-    <li><a href="track.html">Track</a></li>
-    <li><a href="profile.html">Profile</a></li>
-    <!-- <li><a href="#">Logout</a></li> -->
-  </ul>
-</nav>
-<div class="profile-container">
-  <h2>My Profile</h2>
+  <nav class="top-nav">
+    <div class="logo">FurEver Safe 🐾</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="report.html">Report</a></li>
+      <li><a href="track.html">Track</a></li>
+      <li class="active"><a href="profile.html">Profile</a></li>
+    </ul>
+  </nav>
 
-  <!-- DISPLAY MODE -->
-  <div id="profileDisplay" class="profile-display">
-    <img id="displayImage" src="default.png" alt="Profile Picture">
-    <p><strong>Name:</strong> <span id="displayName"></span></p>
-    <p><strong>Email:</strong> <span id="displayEmail"></span></p>
-    <p><strong>Phone:</strong> <span id="displayPhone"></span></p>
-    <p><strong>Address:</strong> <span id="displayAddress"></span></p>
+  <div class="profile-page">
+    <div class="profile-card">
+      <div class="profile-banner"></div>
 
-    <button id="editProfileBtn">Edit Profile</button>
-    <button id="logoutBtn" class="logout-btn">Logout</button>
-  </div>
+      <!-- DISPLAY MODE -->
+      <div id="profileDisplay">
+        <div class="profile-avatar-wrap">
+          <img src="https://api.dicebear.com/7.x/thumbs/svg?seed=fureversafe" alt="Avatar" id="displayImage">
+        </div>
+        <div class="profile-body">
+          <p class="profile-name" id="displayName">Loading...</p>
+          <div class="profile-badges">
+            <span class="badge-pill badge-role" id="displayRole">citizen</span>
+            <span class="badge-pill badge-reports">🐾 Active Member</span>
+          </div>
+          <div class="profile-info">
+            <div class="profile-info-row">
+              <span class="icon">✉️</span>
+              <span class="label">Email</span>
+              <span id="displayEmail">—</span>
+            </div>
+            <div class="profile-info-row">
+              <span class="icon">📞</span>
+              <span class="label">Phone</span>
+              <span id="displayPhone">—</span>
+            </div>
+          </div>
+          <div class="profile-actions">
+            <button class="btn-primary" id="editProfileBtn">✏️ Edit Profile</button>
+            <button class="btn-icon" id="logoutBtn" title="Logout">🚪</button>
+          </div>
+        </div>
+      </div>
 
-  <!-- EDIT MODE -->
-  <form id="profileForm" style="display:none;">
-    <input type="file" id="profilePicInput" accept="image/*">
-
-    <label>Name</label>
-    <input type="text" id="name" required>
-
-    <label>Email</label>
-    <input type="email" id="email" required>
-
-    <label>Phone</label>
-    <input type="text" id="phone">
-
-    <label>Address</label>
-    <textarea id="address"></textarea>
-
-    <button type="submit">Save Changes</button>
-  </form>
-</div>
-
-<!-- Logout Modal -->
-<div class="logout-modal" id="logoutModal">
-  <div class="logout-box">
-    <h3>Are you sure you want to logout?</h3>
-    <div class="logout-actions">
-      <button id="cancelLogout">No</button>
-      <button id="confirmLogout">Yes</button>
+      <!-- EDIT MODE -->
+      <form id="profileForm" class="edit-form">
+        <h3>Edit Profile</h3>
+        <label>Name</label>
+        <input type="text" id="inputName" placeholder="Your name" required>
+        <label>Phone</label>
+        <input type="text" id="inputPhone" placeholder="Your phone number">
+        <div class="edit-form-actions">
+          <button type="submit" class="btn-save">Save</button>
+          <button type="button" class="btn-cancel" id="cancelEdit">Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
-</div>
 
-<script src="js/profile.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Logout Modal -->
+  <div class="logout-modal" id="logoutModal">
+    <div class="logout-box">
+      <h3>Are you sure you want to logout?</h3>
+      <div class="logout-actions">
+        <button id="cancelLogout">No</button>
+        <button id="confirmLogout">Yes</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/profile.js"></script>
 </body>
+
 </html>
