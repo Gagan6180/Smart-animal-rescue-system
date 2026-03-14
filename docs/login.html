@@ -1,54 +1,38 @@
+
+
 <!DOCTYPE html>
 <html>
-
 <head>
-  <title>Login - FurEver Safe</title>
+  <title>Login - Animal Rescue</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-  <div class="login-wrapper">
-    <div class="login-card">
-      <h1 class="brand-title">FurEver Safe 🐾</h1>
-      <p class="tagline">Because every paw deserves protection</p>
 
-      <!-- LOGIN / SIGNUP TOGGLE -->
-      <div class="role-selector" style="margin-bottom:10px;">
-        <button type="button" class="role-btn active" id="showLogin">Login</button>
-        <button type="button" class="role-btn" id="showSignup">Sign Up</button>
-      </div>
+<div class="login-wrapper">
+  <div class="login-card">
 
-      <!-- LOGIN FORM -->
-      <div id="loginSection">
-        <div class="role-selector">
-          <button type="button" class="role-btn active" data-role="user">User</button>
-          <button type="button" class="role-btn" data-role="volunteer">Volunteer</button>
-          <button type="button" class="role-btn" data-role="admin">Admin</button>
-        </div>
-        <form id="loginForm">
-          <div id="loginFields"></div>
-          <button type="submit">Login</button>
-        </form>
-      </div>
-
-      <!-- SIGNUP FORM -->
-      <div id="signupSection" style="display:none;">
-        <form id="signupForm">
-          <input type="text" id="signupName" placeholder="Full Name" required>
-          <input type="email" id="signupEmail" placeholder="Email" required>
-          <input type="password" id="signupPassword" placeholder="Password" required>
-          <input type="text" id="signupPhone" placeholder="Phone Number">
-          <select id="signupRole">
-            <option value="citizen">I am a Citizen</option>
-            <option value="volunteer">I am a Volunteer</option>
-          </select>
-          <button type="submit">Create Account</button>
-        </form>
-      </div>
-
+    <h1 class="brand-title">FurEver Safe 🐾</h1>
+    <p class="tagline">Because every paw deserves protection</p>
+    <div class="role-selector">
+      <button type="button" class="role-btn" data-role="user">User</button>
+      <button type="button" class="role-btn" data-role="volunteer">Volunteer</button>
+      <button type="button" class="role-btn" data-role="admin">Admin</button>
     </div>
-  </div>
-  <script src="js/login.js"></script>
-</body>
 
+    <form id="loginForm">
+      <input type="text" id="name" placeholder="Name" required>
+      <input type="text" id="phone" placeholder="Phone Number" required>
+
+      <div id="extraFields"></div>
+
+      <button type="submit">Login</button>
+    </form>
+
+  </div>
+</div>
+
+<script src="js/login.js"></script>
+</body>
 </html>
+
+  

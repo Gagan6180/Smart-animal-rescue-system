@@ -11,11 +11,18 @@
   min-height: 100vh;    /* ensure full viewport height */
   padding-bottom: 80px; /* give space for the footer so it doesn’t overlap content */
 }
-
 body {
-  background-color: #E8F7F2;
-  margin: 0;
+  background-color:#E8F7F2 ;
+   margin: 0;
   padding: 0;
+  /* Background image styling */
+body {
+  background-image: url("https://th.bing.com/th/id/OIF.dh8iygFbKLIGKb6me9Js0g?w=283&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3");
+  background-size: cover;       /* cover the whole area without stretching */
+  background-position: center;  /* center the image */
+  background-repeat: no-repeat; /* prevent repeating */
+  background-attachment: fixed; /* optional: makes it stay while scrolling */
+}
 }
 
 .main-content {
@@ -85,6 +92,12 @@ body {
   /* background-color: #333;  dark background for active */
   /* color: #fff;             /* white text for active */
   border-radius: 5px; 
+}
+
+/* Optional: make hover still work on active */
+.top-nav .nav-links li.active a:hover {
+  /* background-color: #ff4d4d; bright red hover */
+  /* color: #fff;               keep text white or change if you want */
 }
 
 /* Main Content */

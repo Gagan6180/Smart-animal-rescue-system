@@ -27,7 +27,7 @@ To build a smart, scalable rescue response system that:
 
 ## 🛠️ Tech Stack
 
-* Frontend: HTML, CSS3, JavaScript
+* Frontend: HTML5, CSS3, JavaScript
 
 * Maps & Location: Leaflet.js, OpenStreetMap API, Geolocation API
 
@@ -86,9 +86,9 @@ Submit PR to main repository
 
 1. Tusshar Singh [@Tusshar-web](https://github.com/Tusshar-web/)
 2. Mahi Sharma
-3. Gagan Upadhyaya [Gagan](https://github.com/Gagan6180)
+3. Gagan Upadhyaya
 4. Bornil Gogoi [@born1l](https://github.com/born1l/)
-5. Snehasish Das [@snehas1sh](https://github.com/snehas1sh)
+5. Snehasish Das
 
 ## 🌍 Future Scope
 
@@ -97,3 +97,7 @@ Submit PR to main repository
 * ntegration with local NGOs
 * Mobile App version
 
+
+<b>👤Author</b>
+<br>
+Tusshar Singh
