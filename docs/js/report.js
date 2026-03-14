@@ -1,7 +1,3 @@
-const BASE_URL = "http://localhost:5005";
-const token = localStorage.getItem("token");
-if (!token) window.location.href = "login.html";
-
 // ============================
 // Report Form Setup
 // ============================
@@ -72,77 +68,61 @@ getLocationBtn?.addEventListener("click", () => {
 });
 
 // ============================
-// Save Report to Backend
+// Save Report
 // ============================
-async function saveReport() {
+function saveReport() {
   const report = {
-    animalType: document.getElementById("animalType").value,
+    id: Date.now(),
+    animal: document.getElementById("animalType").value,
     location: document.getElementById("location").value,
     description: document.getElementById("description").value,
-    urgency: document.getElementById("urgency").value
+    urgency: document.getElementById("urgency").value,
+    status: "Submitted",
+    time: Date.now()
   };
 
-  try {
-    const res = await fetch(`${BASE_URL}/api/reports`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(report)
-    });
+  let reports = JSON.parse(localStorage.getItem("reports")) || [];
+  reports.push(report);
+  localStorage.setItem("reports", JSON.stringify(reports));
+  loadReports();
+  reportForm.reset();
 
-    const data = await res.json();
-    if (!res.ok) {
-      alert(data.error || "Failed to submit report.");
-      return;
-    }
-
-    reportForm.reset();
-    if (preview) preview.src = "";
-    loadReports();
-    alert("Report submitted successfully!");
-  } catch {
-    alert("Server error. Is the backend running?");
-  }
+  // FIX: Clear image preview after reset
+  if (preview) preview.src = "";
 }
 
 // ============================
-// Load Reports from Backend
+// Load Reports
 // ============================
-async function loadReports() {
-  if (!reportList) return;
+function loadReports() {
+  const reports = JSON.parse(localStorage.getItem("reports")) || [];
+  reportList.innerHTML = "";
 
-  try {
-    const res = await fetch(`${BASE_URL}/api/reports/mine`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const reports = await res.json();
-    reportList.innerHTML = "";
-
-    if (!reports.length) {
-      reportList.innerHTML = `<tr><td colspan="5">No reports yet.</td></tr>`;
-      return;
+  reports.forEach(report => {
+    const now = Date.now();
+    if (report.status === "Submitted" && now - report.time > 15000) {
+      report.status = "Accepted";
     }
 
-    reports.forEach(report => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${report.animalType}</td>
-        <td>${report.location}</td>
-        <td>${report.description || "—"}</td>
-        <td>${report.urgency}</td>
-        <td>${report.status}</td>
-      `;
-      reportList.appendChild(row);
-    });
-  } catch {
-    if (reportList) reportList.innerHTML = `<tr><td colspan="5">Could not load reports.</td></tr>`;
-  }
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${report.animal}</td>
+      <td>${report.location}</td>
+      <td>${report.description}</td>
+      <td>${report.urgency}</td>
+      <td>${report.status}</td>
+      <td><button onclick="editReport(${report.id})">Edit</button></td>
+    `;
+    reportList.appendChild(row);
+  });
+
+  // Persist updated statuses
+  localStorage.setItem("reports", JSON.stringify(reports));
 }
 
 // ============================
 // Submit Report with AI Check
+// FIX: Only ONE submit listener — removed the duplicate incomplete handler
 // ============================
 reportForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -157,6 +137,7 @@ reportForm?.addEventListener("submit", async (e) => {
     return;
   }
 
+  // FIX: Wrap preview.decode() in try/catch in case image hasn't fully loaded
   try {
     await preview.decode();
   } catch {
@@ -168,6 +149,7 @@ reportForm?.addEventListener("submit", async (e) => {
   const label = predictions[0].className.toLowerCase();
   console.log("Prediction:", label);
 
+  // FIX: Expanded animal keyword list to cover more MobileNet ImageNet labels
   const animalKeywords = [
     "dog", "cat", "retriever", "animal", "bird", "fish", "snake",
     "horse", "cow", "elephant", "bear", "lion", "tiger", "rabbit",
@@ -185,19 +167,39 @@ reportForm?.addEventListener("submit", async (e) => {
     return;
   }
 
-  await saveReport();
+  saveReport();
+  alert("Report submitted successfully!");
 });
 
 // ============================
-// Clear Reports button (disabled — data is in DB now)
+// Edit Report
+// ============================
+window.editReport = function (id) {
+  let reports = JSON.parse(localStorage.getItem("reports"));
+  const report = reports.find(r => r.id === id);
+  if (!report) return;
+
+  const newLocation = prompt("Update location:", report.location);
+  if (newLocation !== null && newLocation.trim() !== "") {
+    report.location = newLocation.trim();
+    localStorage.setItem("reports", JSON.stringify(reports));
+    loadReports();
+  }
+};
+
+// ============================
+// Clear Reports
 // ============================
 const clearBtn = document.getElementById("clearReports");
 clearBtn?.addEventListener("click", () => {
-  alert("Reports are now stored in the database and cannot be cleared from here.");
+  if (confirm("Delete all reports?")) {
+    localStorage.removeItem("reports");
+    loadReports();
+  }
 });
 
 // ============================
-// Initial Load
+// Auto Refresh + Initial Load
 // ============================
 loadReports();
-setInterval(loadReports, 10000);
+setInterval(loadReports, 3000);

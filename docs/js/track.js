@@ -1,28 +1,21 @@
 // ============================
 // LOAD REPORT FROM LOCALSTORAGE
 // ============================
-const BASE_URL = "http://localhost:5005";
-const token = localStorage.getItem("token");
-if (!token) window.location.href = "login.html";
-let report = null;
-async function fetchLatestReport() {
-  try {
-    const res = await fetch(`${BASE_URL}/api/reports/mine`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const reports = await res.json();
-    report = reports.length ? reports[reports.length - 1] : null;
-  } catch {
-    report = null;
-  }
-  render();
-}
+const reports = JSON.parse(localStorage.getItem("reports")) || [];
+const report = reports.length ? reports[reports.length - 1] : null;
 
 const statusBanner   = document.getElementById("statusBanner");
 const noReportState  = document.getElementById("noReportState");
 const pendingState   = document.getElementById("pendingState");
 const rejectedState  = document.getElementById("rejectedState");
 const acceptedState  = document.getElementById("acceptedState");
+
+// Auto-transition: mark as Accepted after 15 seconds
+if (report && report.status === "Submitted" && Date.now() - report.time > 15000) {
+  report.status = "Accepted";
+  report.volunteer = { name: "Rahul Sharma", phone: "+91 98765 43210" };
+  localStorage.setItem("reports", JSON.stringify(reports));
+}
 
 // ============================
 // RENDER CORRECT STATE
@@ -34,13 +27,13 @@ function render() {
     return;
   }
 
-  if (report.status === "open") {
+  if (report.status === "Submitted") {
     showBanner("pending");
     pendingState.style.display = "block";
 
     // Fill pending preview with real report data
     document.getElementById("pendingPreview").innerHTML = `
-      <p><span>Animal:</span> ${report.animalType || "—"}</p>
+      <p><span>Animal:</span> ${report.animal || "—"}</p>
       <p><span>Location:</span> ${report.location || "—"}</p>
       <p><span>Urgency:</span> ${report.urgency || "—"}</p>
     `;
@@ -50,10 +43,18 @@ function render() {
     return;
   }
 
-  if (report.status === "in-progress" || report.status === "rescued") {
+  if (report.status === "Rejected") {
+    showBanner("rejected");
+    rejectedState.style.display = "block";
+    return;
+  }
+
+  if (report.status === "Accepted") {
     showBanner("accepted");
     acceptedState.style.display = "block";
-    document.getElementById("summaryAnimal").textContent = report.animalType || "—";
+
+    // Populate summary table with real report data
+    document.getElementById("summaryAnimal").textContent   = report.animal   || "—";
     document.getElementById("summaryLocation").textContent = report.location || "—";
 
     const urgencyEl = document.getElementById("summaryUrgency");
@@ -241,4 +242,4 @@ function initChat() {
 // ============================
 // KICK OFF
 // ============================
-fetchLatestReport();
+render();

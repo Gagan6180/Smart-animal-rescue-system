@@ -1,132 +1,177 @@
-const BASE_URL = "http://localhost:5005";
-const token = localStorage.getItem("token");
-const user = JSON.parse(localStorage.getItem("user") || "{}");
+document.addEventListener("DOMContentLoaded", function () {
 
-// Redirect if not volunteer
-if (!token || user.role !== "volunteer") window.location.href = "login.html";
+    // ================= PROFILE SECTION =================
+    const displayName = document.getElementById("displayName");
+    const displayEmail = document.getElementById("displayEmail");
+    const displayPhone = document.getElementById("displayPhone");
+    const displayImage = document.getElementById("displayImage");
 
-let allCases = [];
+    function loadProfile() {
+        const savedProfile = JSON.parse(localStorage.getItem("userProfile"));
 
-// ================= PROFILE =================
-const displayName = document.getElementById("displayName");
-const displayEmail = document.getElementById("displayEmail");
-const displayPhone = document.getElementById("displayPhone");
-if (displayName) displayName.textContent = user.name || "Volunteer";
-if (displayEmail) displayEmail.textContent = user.email || "";
-if (displayPhone) displayPhone.textContent = user.phone || "";
-
-// ================= LOAD CASES =================
-async function loadCases(filter = "all") {
-    try {
-        const res = await fetch(`${BASE_URL}/api/reports`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        allCases = await res.json();
-        updateStats();
-        renderCases(filter);
-    } catch {
-        document.getElementById("caseList").innerHTML = "<p>Could not load cases.</p>";
+        if (savedProfile) {
+            displayName.textContent = savedProfile.name;
+            displayEmail.textContent = savedProfile.email;
+            displayPhone.textContent = savedProfile.phone;
+            displayImage.src = savedProfile.image || "default.png";
+        }
     }
-}
 
-function updateStats() {
-    const total = allCases.length;
-    const open = allCases.filter(c => c.status === "open").length;
-    const active = allCases.filter(c => c.status === "in-progress").length;
-    const rescued = allCases.filter(c => c.status === "rescued").length;
-    const statTotal = document.getElementById("statTotal");
-    const statOpen = document.getElementById("statOpen");
-    const statActive = document.getElementById("statActive");
-    const statRescued = document.getElementById("statRescued");
-    if (statTotal) statTotal.textContent = total;
-    if (statOpen) statOpen.textContent = open;
-    if (statActive) statActive.textContent = active;
-    if (statRescued) statRescued.textContent = rescued;
-}
+    loadProfile();
 
-function renderCases(filter = "all") {
-    const caseList = document.getElementById("caseList");
-    if (!caseList) return;
-    const filtered = filter === "all" ? allCases : allCases.filter(c => c.status === filter);
-    if (!filtered.length) {
-        caseList.innerHTML = "<p>No cases found.</p>";
-        return;
+
+    // ================= STATS SECTION =================
+    function loadStats() {
+        const cases = JSON.parse(localStorage.getItem("volunteerCases")) || [];
+
+        const total = cases.length;
+        const open = cases.filter(c => c.status === "open").length;
+        const active = cases.filter(c => c.status === "in-progress").length;
+        const rescued = cases.filter(c => c.status === "rescued").length;
+
+        const statTotal = document.getElementById("statTotal");
+        const statOpen = document.getElementById("statOpen");
+        const statActive = document.getElementById("statActive");
+        const statRescued = document.getElementById("statRescued");
+
+        if (statTotal) statTotal.textContent = total;
+        if (statOpen) statOpen.textContent = open;
+        if (statActive) statActive.textContent = active;
+        if (statRescued) statRescued.textContent = rescued;
     }
-    caseList.innerHTML = filtered.map(c => `
-        <div class="case-item">
-            <div class="case-info">
-                <p class="case-title">${c.animalType} — ${c.location}</p>
-                <p class="case-location">Urgency: ${c.urgency}</p>
-                <p class="case-status">Status: ${c.status}</p>
-                ${c.description ? `<p class="case-notes">${c.description}</p>` : ""}
-            </div>
-            <button class="updateStatusBtn" data-id="${c._id}">Update Status</button>
+
+    loadStats();
+
+
+    // ================= CASE LIST SECTION =================
+    function loadCases(filter) {
+        filter = filter || "all";
+
+        const cases = JSON.parse(localStorage.getItem("volunteerCases")) || [];
+        const caseList = document.getElementById("caseList");
+        if (!caseList) return;
+
+        const filtered = filter === "all" ? cases : cases.filter(c => c.status === filter);
+
+        if (filtered.length === 0) {
+            caseList.innerHTML = "<p>No cases found.</p>";
+            return;
+        }
+
+        caseList.innerHTML = "";
+
+        filtered.forEach(function (c) {
+            const item = document.createElement("div");
+            item.className = "case-item";
+            item.dataset.id = c.id;
+            item.innerHTML = `
+        <div class="case-info">
+          <p class="case-title">${c.title}</p>
+          <p class="case-location">${c.location}</p>
+          <p class="case-status">${c.status}</p>
+          ${c.notes ? `<p class="case-notes">${c.notes}</p>` : ""}
         </div>
-    `).join("");
+        <button class="updateStatusBtn" data-id="${c.id}">Update Status</button>
+      `;
+            caseList.appendChild(item);
+        });
 
-    document.querySelectorAll(".updateStatusBtn").forEach(btn => {
-        btn.addEventListener("click", () => openUpdateModal(btn.dataset.id));
+        // Attach update button listeners
+        document.querySelectorAll(".updateStatusBtn").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                openUpdateModal(btn.dataset.id);
+            });
+        });
+    }
+
+    loadCases("all");
+
+    // ===== Filter Tabs =====
+    const filterBtns = document.querySelectorAll(".filterBtn");
+
+    filterBtns.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            filterBtns.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            loadCases(btn.dataset.filter);
+        });
     });
-}
 
-// ================= FILTER TABS =================
-document.querySelectorAll(".filterBtn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".filterBtn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderCases(btn.dataset.filter);
-    });
-});
 
-// ================= UPDATE MODAL =================
-let editingCaseId = null;
-
-function openUpdateModal(id) {
-    editingCaseId = id;
-    const c = allCases.find(x => x._id === id);
-    if (!c) return;
-    const modalCaseId = document.getElementById("modalCaseId");
+    // ================= UPDATE STATUS MODAL =================
+    const updateModal = document.getElementById("updateModal");
+    const cancelUpdate = document.getElementById("cancelUpdate");
+    const saveUpdate = document.getElementById("saveUpdate");
     const statusSelect = document.getElementById("statusSelect");
     const caseNotes = document.getElementById("caseNotes");
-    if (modalCaseId) modalCaseId.textContent = `${c.animalType} — ${c.location}`;
-    if (statusSelect) statusSelect.value = c.status;
-    if (caseNotes) caseNotes.value = c.description || "";
-    document.getElementById("updateModal").classList.add("active");
-}
+    const modalCaseId = document.getElementById("modalCaseId");
 
-document.getElementById("cancelUpdate")?.addEventListener("click", () => {
-    document.getElementById("updateModal").classList.remove("active");
-});
+    let editingCaseId = null;
 
-document.getElementById("saveUpdate")?.addEventListener("click", async () => {
-    const status = document.getElementById("statusSelect").value;
-    try {
-        await fetch(`${BASE_URL}/api/reports/${editingCaseId}`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ status })
-        });
-        document.getElementById("updateModal").classList.remove("active");
-        loadCases(document.querySelector(".filterBtn.active")?.dataset.filter || "all");
-    } catch {
-        alert("Failed to update case.");
+    function openUpdateModal(id) {
+        const cases = JSON.parse(localStorage.getItem("volunteerCases")) || [];
+        const c = cases.find(x => x.id === id);
+        if (!c) return;
+
+        editingCaseId = id;
+
+        if (modalCaseId) modalCaseId.textContent = "Case #" + id;
+        if (statusSelect) statusSelect.value = c.status;
+        if (caseNotes) caseNotes.value = c.notes || "";
+
+        if (updateModal) updateModal.classList.add("active");
     }
+
+    if (cancelUpdate) {
+        cancelUpdate.addEventListener("click", function () {
+            updateModal.classList.remove("active");
+        });
+    }
+
+    if (saveUpdate) {
+        saveUpdate.addEventListener("click", function () {
+            const cases = JSON.parse(localStorage.getItem("volunteerCases")) || [];
+            const idx = cases.findIndex(c => c.id === editingCaseId);
+
+            if (idx !== -1) {
+                cases[idx].status = statusSelect.value;
+                cases[idx].notes = caseNotes.value;
+                localStorage.setItem("volunteerCases", JSON.stringify(cases));
+            }
+
+            updateModal.classList.remove("active");
+            loadCases(document.querySelector(".filterBtn.active")?.dataset.filter || "all");
+            loadStats();
+        });
+    }
+
+
+    // ================= LOGOUT MODAL =================
+    const logoutBtn = document.getElementById("logoutBtn");
+    const logoutModal = document.getElementById("logoutModal");
+    const cancelLogout = document.getElementById("cancelLogout");
+    const confirmLogout = document.getElementById("confirmLogout");
+
+    if (logoutBtn && logoutModal && cancelLogout && confirmLogout) {
+
+        logoutBtn.addEventListener("click", function () {
+            logoutModal.classList.add("active");
+        });
+
+        cancelLogout.addEventListener("click", function () {
+            logoutModal.classList.remove("active");
+        });
+
+        confirmLogout.addEventListener("click", function () {
+            localStorage.removeItem("loggedIn");
+            window.location.href = "login.html";
+        });
+
+    }
+
 });
 
-// ================= LOGOUT =================
-document.getElementById("logoutBtn")?.addEventListener("click", () => {
-    document.getElementById("logoutModal").classList.add("active");
-});
-document.getElementById("cancelLogout")?.addEventListener("click", () => {
-    document.getElementById("logoutModal").classList.remove("active");
-});
-document.getElementById("confirmLogout")?.addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "login.html";
-});
 
-// ================= INIT =================
-loadCases();
+if(localStorage.getItem("role") !== "volunteer"){
+  window.location.href = "login.html";
+}

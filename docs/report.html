@@ -1,96 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Animal Report</title>
-       <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Report</title>
+     <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-  </head>
-  <body>
-       <nav class="top-nav">
-    <div class="logo">FurEver Safe 🐾</div>
-    <ul class="nav-links">
-      <li class="active"><a href="home.html">Home</a></li>
-      <li><a href="report.html">Report</a></li>
-      <li><a href="track.html">Track</a></li>
-      <li><a href="profile.html">Profile</a></li>
-      <!-- <li><a href="#">Logout</a></li> -->
-    </ul>
-  </nav>
-  <!-- Daily Quote Section  -->
-    <!-- <div id="daily-quote">
-    <p id="quote-text">Loading quote...</p>
-  </div> -->
-  <div class="report-wrapper">
-  <div class="report-container">
-      <div class="logo repLogo">FurEver Safe 🐾</div>
-      <form id="reportForm" class="report-container">
-    <label for="animalType">Animal Type:</label>
-    <input type="text" id="animalType" name="animalType" placeholder="Dog, Cat, etc." required>
+</head>
+<body>
+     <nav class="top-nav">
+  <div class="logo">FurEver Safe 🐾</div>
+  <ul class="nav-links">
+    <li class="active"><a href="home.html">Home</a></li>
+    <li><a href="report.html">Report</a></li>
+    <li><a href="track.html">Track</a></li>
+    <li><a href="profile.html">Profile</a></li>
+    <!-- <li><a href="#">Logout</a></li> -->
+  </ul>
+</nav>
+<!-- Daily Quote Section  -->
+  <!-- <div id="daily-quote">
+  <p id="quote-text">Loading quote...</p>
+</div> -->
+<div class="report-wrapper">
+<div class="report-container">
+    <div class="logo repLogo">FurEver Safe 🐾</div>
+    <form id="reportForm" class="report-container">
+  <label for="animalType">Animal Type:</label>
+  <input type="text" id="animalType" name="animalType" placeholder="Dog, Cat, etc." required>
 
-    <label for="location">Location:</label>
-    <input type="text" id="location" name="location" placeholder="Enter address or use button" required>
-    <button type="button" id="getLocation">Use My Location</button>
+  <label for="location">Location:</label>
+  <input type="text" id="location" name="location" placeholder="Enter address or use button" required>
+  <button type="button" id="getLocation">Use My Location</button>
 
-   <!-- <label for="photo" style="font-weight:600; color:#333;">Photo:</label> -->
+ <!-- <label for="photo" style="font-weight:600; color:#333;">Photo:</label> -->
 
-  <!-- Camera button -->
-  <!-- <button type="button" id="takePhoto">📷 Take Photo</button> -->
+<!-- Camera button -->
+<!-- <button type="button" id="takePhoto">📷 Take Photo</button> -->
 
-  <!-- Default choose file -->
-  <!-- <input type="file" id="photo" name="photo" accept="image/*" capture="environment" style="margin-top:10px;" required> -->
+<!-- Default choose file -->
+<!-- <input type="file" id="photo" name="photo" accept="image/*" capture="environment" style="margin-top:10px;" required> -->
 
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" rows="4" placeholder="Brief description" required></textarea>
+  <label for="description">Description:</label>
+  <textarea id="description" name="description" rows="4" placeholder="Brief description" required></textarea>
 
-    <label for="urgency">Urgency:</label>
-    <select id="urgency" name="urgency" required>
-      <option value="">Select urgency</option>
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
+  <label for="urgency">Urgency:</label>
+  <select id="urgency" name="urgency" required>
+    <option value="">Select urgency</option>
+    <option value="low">Low</option>
+    <option value="medium">Medium</option>
+    <option value="high">High</option>
+  </select>
 
 
-    <div class="report-actions">
-      <!-- <button type="submit" id="submitReport">Submit Report</button> -->
-       <input type="file" id="animalImage" accept="image/*">
-  <img id="preview" width="200">
+  <div class="report-actions">
+    <!-- <button type="submit" id="submitReport">Submit Report</button> -->
+     <input type="file" id="animalImage" accept="image/*">
+<img id="preview" width="200">
 
-  <button id="submitReport">Submit Report</button>
+<button id="submitReport">Submit Report</button>
 
-  <p id="aiResult"></p>
-      <button type="button" id="clearReports">🗑️ Clear Reports</button>
-    </div>
-  </form>
-  </form>
-
-  <!-- Submitted Reports Table -->
-  <div class="report-table">
-    <h3>Submitted Reports</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Animal</th>
-          <th>Location</th>
-          <th>Description</th>
-          <th>Urgency</th>
-                  <th>Status</th>
-          <th>Photo</th>
-        </tr>
-      </thead>
-      <tbody id="reportList"></tbody>
-    </table>
+<p id="aiResult"></p>
+    <button type="button" id="clearReports">🗑️ Clear Reports</button>
   </div>
-  </div>
-  </div>
+</form>
+</form>
 
-  <script src="js/config.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
-   <script src="js/report.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  </body>
+<!-- Submitted Reports Table -->
+<div class="report-table">
+  <h3>Submitted Reports</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Animal</th>
+        <th>Location</th>
+        <th>Description</th>
+        <th>Urgency</th>
+                <th>Status</th>
+        <th>Photo</th>
+      </tr>
+    </thead>
+    <tbody id="reportList"></tbody>
+  </table>
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+ <script src="js/report.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</body>
 </html>
